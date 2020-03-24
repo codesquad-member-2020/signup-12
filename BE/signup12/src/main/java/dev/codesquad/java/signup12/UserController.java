@@ -22,6 +22,8 @@ public class UserController {
     public String create(Model model, User user) {;
         model.addAttribute("user", user);
         userRepository.save(user);
+        String user1 = userRepository.findByUserid(user.getUserid()).getUserid();
+        System.out.println(user1);
         return "/result";
     }
 }
