@@ -37,6 +37,30 @@ public class User {
         return createdDate;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCreatedDate(LocalDate createdDate) {
+        this.createdDate = createdDate;
+    }
+
     @Override
     public String toString() {
         return "User{" +
