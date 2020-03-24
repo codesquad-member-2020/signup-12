@@ -11,6 +11,8 @@ public class User {
     String password;
     String email;
     String name;
+    String gender;
+    String phone;
     LocalDate createdDate;
 
     public Long getId() {
@@ -31,6 +33,14 @@ public class User {
 
     public String getName() {
         return name;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public String getPhone() {
+        return phone;
     }
 
     public LocalDate getCreatedDate() {
@@ -57,6 +67,14 @@ public class User {
         this.name = name;
     }
 
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public void setCreatedDate(LocalDate createdDate) {
         this.createdDate = createdDate;
     }
@@ -65,10 +83,12 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", userId='" + userid + '\'' +
+                ", userid='" + userid + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", name='" + name + '\'' +
+                ", gender='" + gender + '\'' +
+                ", phone='" + phone + '\'' +
                 ", createdDate=" + createdDate +
                 '}';
     }
