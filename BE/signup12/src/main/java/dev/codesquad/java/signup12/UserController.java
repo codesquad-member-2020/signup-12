@@ -15,7 +15,7 @@ public class UserController {
 
     @GetMapping("/form")
     public String viewUserForm() {
-        return "/form";
+        return "/join";
     }
 
     @PostMapping("/create")
