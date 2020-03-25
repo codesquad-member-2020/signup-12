@@ -9,9 +9,10 @@ public class User {
     Long id;
     String userId;
     String password;
-    String email;
     String name;
+    String birthDate;
     String gender;
+    String email;
     String phone;
     LocalDate createdDate;
 
@@ -27,16 +28,20 @@ public class User {
         return password;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
     public String getName() {
         return name;
     }
 
+    public String getBirthDate() {
+        return birthDate;
+    }
+
     public String getGender() {
         return gender;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public String getPhone() {
@@ -59,16 +64,20 @@ public class User {
         this.password = password;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
+    }
+
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setPhone(String phone) {
@@ -85,9 +94,10 @@ public class User {
                 "id=" + id +
                 ", userId='" + userId + '\'' +
                 ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
                 ", name='" + name + '\'' +
+                ", birthDate='" + birthDate + '\'' +
                 ", gender='" + gender + '\'' +
+                ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", createdDate=" + createdDate +
                 '}';
