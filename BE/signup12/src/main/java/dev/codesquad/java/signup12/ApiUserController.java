@@ -10,7 +10,7 @@ public class ApiUserController {
     @Autowired
     UserRepository userRepository;
 
-    @GetMapping("/")
+    @GetMapping("/test")
     public User test() {
         Long id = 1L;
         return userRepository.findById(id).orElseThrow(() -> new IllegalStateException("NO DATA"));
