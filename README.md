@@ -1,6 +1,14 @@
 # signup-12
 회원가입 프로젝트 - 12팀
 
+### 팀구성
+
+- BE : Hamil, Henry
+
+- FE : Ari, Sally
+
+- IOS : H
+
 ### 그라운드 룰
 
 - 시간
@@ -21,3 +29,7 @@
      https://gmlwjd9405.github.io/2018/05/12/how-to-collaborate-on-GitHub-3.html
 
   3. 해당 브랜치에 push 후 브랜치 작업 마무리되면 dev에 PR 후 merge한다. (PR merge는 각 클래스별로 진행한다.)
+
+### 요구사항 및 기능 목록
+
+https://docs.google.com/spreadsheets/d/1yQfjP3o4i1k0aq98EK1RKVtSoskfwRWf-iFFh2Yg_CY/edit
