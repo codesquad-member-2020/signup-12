@@ -19,11 +19,18 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public String create(Model model, User user) {;
+    public String create(Model model, User user, String userId) {
         model.addAttribute("user", user);
-        userRepository.save(user);
-        String user1 = userRepository.findByUserid(user.getUserid()).getUserid();
-        System.out.println(user1);
+        //userRepository.save(user);
+        System.out.println("userId >>>" + userId);
+        model.addAttribute("isValidUserId", isValidUserId(userId));
         return "/result";
+    }
+
+    public boolean isValidUserId(String userId) {
+        if (userRepository.findByUserId(userId) == null) {
+            return false;
+        }
+        return true;
     }
 }

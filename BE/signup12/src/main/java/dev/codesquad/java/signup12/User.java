@@ -7,7 +7,7 @@ import java.time.LocalDate;
 public class User {
     @Id
     Long id;
-    String userid;
+    String userId;
     String password;
     String email;
     String name;
@@ -19,8 +19,8 @@ public class User {
         return id;
     }
 
-    public String getUserid() {
-        return userid;
+    public String getUserId() {
+        return userId;
     }
 
     public String getPassword() {
@@ -51,8 +51,8 @@ public class User {
         this.id = id;
     }
 
-    public void setUserid(String userid) {
-        this.userid = userid;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public void setPassword(String password) {
@@ -83,7 +83,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", userid='" + userid + '\'' +
+                ", userId='" + userId + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", name='" + name + '\'' +
