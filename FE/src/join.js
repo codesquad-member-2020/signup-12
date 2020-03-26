@@ -1,17 +1,15 @@
-import {regExp, isValid} from './validation.js';
-import {validationMessage} from './constant.js';
+import {regExp, isValid} from './util/validation.js';
+import {validationMessage} from './constants/constant.js';
+import {getElement, classAdd, classRemove} from './util/domUtil.js';
 
-const $ = (ele) => document.querySelector(ele);
-const _Ele = {
-  form: $('.form-wrap form'),
-}
+const formWrap = getElement('.form-wrap form');
 
-_Ele.form.addEventListener('focusin', (e) => {
-  e.target.classList.add('focus');
+formWrap.addEventListener('focusin', (e) => {
+  classAdd(e.target, 'focus');
 })
 
-_Ele.form.addEventListener('focusout', (e) => {
-  e.target.classList.remove('focus');
+formWrap.addEventListener('focusout', (e) => {
+  classRemove(e.target, 'focus');
   checkIDHandle(e);
   checkPWHandle(e);
   doubleCheckPWHandle(e);
@@ -20,16 +18,16 @@ _Ele.form.addEventListener('focusout', (e) => {
   checkPhoneHandle(e);
 });
 
-_Ele.form.querySelector('.interest-tag').addEventListener('keyup', (e) => {
+getElement('.interest-tag').addEventListener('keyup', (e) => {
   if(e.keyCode !== 188) return;
   tag(e);
 })
 
 const errMSG = (selector, ...msg) => {
-  const errEle = _Ele.form.querySelector(`${selector} .err-box`);
+  const errEle = getElement(`${selector} .err-box`);
   errEle.innerText = msg[0];
-  if(msg[1]) errEle.classList.add('check');
-  else errEle.classList.remove('check');
+  if(msg[1]) classAdd(errEle, 'check');
+  else classRemove(errEle, 'check');
 };
 
 const checkIDHandle = (e) => {
@@ -65,7 +63,7 @@ const checkPW = (inputPw) => {
 
 const doubleCheckPWHandle = (e) => {
   const test = curring(doubleCheckPW);
-  test(_Ele.form.querySelector('.user-pw').value)(e.target);
+  test(getElement('.user-pw').value)(e.target);
 }
 
 const doubleCheckPW = (pwEleValue, target) => {
@@ -124,15 +122,14 @@ const checkPhoneHandle = (e) => {
 }
 
 const tag = (e) => {
-  const parentEle = _Ele.form.querySelector('.interest-input');
+  const parentEle = getElement('.interest-input');
 
   const divEle = document.createElement('div');
-  divEle.classList.add('tag');
+  classAdd(divEle, 'tag')
   const spanEle = document.createElement('span');
-  spanEle.classList.add('tag-text');
+  classAdd(spanEle, 'tag-text');
   const buttonEle = document.createElement('button');
-  buttonEle.classList.add('tag-close');
-
+  classAdd(buttonEle, 'tag-close');
 
   spanEle.innerText = e.target.value;
   divEle.appendChild(spanEle);
