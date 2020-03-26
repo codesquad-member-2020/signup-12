@@ -26,13 +26,29 @@ body {
 }
 
 .form-wrap > form > div {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .form-wrap label {
   font-size: 13px;
   font-weight: bold;
   color: #000;
+}
+
+.form-wrap .err-box {
+  display: block;
+  height: 10px;
+  line-height: 10px;
+  font-size: 11px;
+  color: red;
+}
+
+.form-wrap .focus {
+  border-color: #04a600;
+}
+
+.form-wrap .err-box.check {
+  color: blue;
 }
 
 .form-wrap input, .form-wrap select {
