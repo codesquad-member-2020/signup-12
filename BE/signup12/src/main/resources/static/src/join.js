@@ -85,7 +85,7 @@ const checkID = (inputId) => {
   });
 
   doubleCheckId.then((data) => {
-    if(!data.validUserId) return validationMessage.ID.INUSE;
+    if(!data) return validationMessage.ID.INUSE;
   })
 
   return validationMessage.ID.AVAILABLE;
