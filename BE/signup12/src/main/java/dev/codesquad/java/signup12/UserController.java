@@ -18,12 +18,7 @@ public class UserController {
 
     @GetMapping("/")
     public String viewWelcomePage() {
-        return "index";
-    }
-
-    @GetMapping("login")
-    public String viewLogin() {
-        return "login";
+        return "/index";
     }
 
     @GetMapping("/form")
@@ -32,17 +27,13 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public String create(Model model, User user, String userId) {
-        model.addAttribute("user", user);
+    public String create(User user, Model model, String userId) {
         userRepository.save(user);
-        model.addAttribute("isValidUserId", isValidUserId(userId));
         return "redirect:/";
     }
 
-    public boolean isValidUserId(String userId) {
-        if (userRepository.findByUserId(userId) == null) {
-            return false;
-        }
-        return true;
+    @GetMapping("/login")
+    public String viewLoginForm() {
+        return "/login";
     }
 }
