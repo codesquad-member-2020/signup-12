@@ -13,3 +13,11 @@ export function classAdd(target, className) {
 export function classRemove(target, className) {
     target.classList.remove(className);
 }
+
+export function show(target) {
+  target.style.display = 'block';
+}
+
+export function hide(target) {
+  target.style.display = 'none';
+}

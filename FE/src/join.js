@@ -1,15 +1,17 @@
 import {regExp, isValid} from './util/validation.js';
 import {validationMessage} from './constants/constant.js';
-import {getElement, classAdd, classRemove} from './util/domUtil.js';
+import {getElement, getElements, classAdd, classRemove, show, hide} from './util/domUtil.js';
 
 const formWrap = getElement('.form-wrap form');
 
 formWrap.addEventListener('focusin', (e) => {
+  if(e.target.className === 'interest-tag') return classAdd(e.target.closest('.interest-input'), 'focus');
   classAdd(e.target, 'focus');
-})
+});
 
 formWrap.addEventListener('focusout', (e) => {
-  classRemove(e.target, 'focus');
+  if(e.target.className === 'interest-tag') classRemove(e.target.closest('.interest-input'), 'focus');
+  else classRemove(e.target, 'focus');
   checkIDHandle(e);
   checkPWHandle(e);
   doubleCheckPWHandle(e);
@@ -18,9 +20,45 @@ formWrap.addEventListener('focusout', (e) => {
   checkPhoneHandle(e);
 });
 
+formWrap.addEventListener('click', (e) => {
+  const targetClassList = e.target.classList;
+  if(targetClassList.contains('terms-btn')) {
+    show(getElement('.terms-popup'));
+    show(getElement('.dim'));
+  }
+
+  if(targetClassList.contains('terms-close')) {
+    hide(getElement('.terms-popup'));
+    hide(getElement('.dim'));
+  }
+
+  if(targetClassList.contains('terms-check-btn')) {
+    const targetParent = e.target.closest('.terms');
+    if(!targetParent.classList.contains('checked')) return;
+    targetParent.querySelector('.terms-checkbox').setAttribute('checked', true);
+    hide(getElement('.terms-popup'));
+    hide(getElement('.dim'));
+  }
+
+  if(targetClassList.contains('join-btn')) {
+    e.preventDefault();
+    const formDivChild = getElements('.form-wrap form > div');
+    const formDivChildArray = Array.prototype.slice.call(formDivChild);
+    const isEveryCheck = formDivChildArray.every((ele) => ele.classList.contains('checked'));
+
+    if(isEveryCheck) formWrap.submit();
+  }
+});
+
 getElement('.interest-tag').addEventListener('keyup', (e) => {
   if(e.keyCode !== 188) return;
   tag(e);
+});
+
+getElement('.terms-content').addEventListener('scroll', (e) => {
+  const isScroll = checkScroll(e.currentTarget);
+
+  if(isScroll) classAdd(getElement('.terms'), 'checked');
 })
 
 const errMSG = (selector, ...msg) => {
@@ -39,8 +77,16 @@ const checkID = (inputId) => {
   if(!isValid(inputId, regExp.id)) return validationMessage.ID.UNAVAILABLE;
 
   //fetch 중복체크
-  const req = requestDuplicateConfirmation('https://41c0715c-5aa1-4130-a5f0-36d018803af4.mock.pstmn.io/users/create'); //{vaildUserId: true}
-  if(req.vaildUserId) return validationMessage.ID.INUSE;
+  const doubleCheckId = fetch('https://41c0715c-5aa1-4130-a5f0-36d018803af4.mock.pstmn.io/users/create', {
+    method: 'POST',
+    body: inputId
+  }).then(response => {
+    return response.json();
+  });
+
+  doubleCheckId.then((data) => {
+    if(data.validUserId) return validationMessage.ID.INUSE;
+  })
 
   return validationMessage.ID.AVAILABLE;
 }
@@ -87,7 +133,8 @@ const checkYear = (value) => {
   const minAge = 15;
   const koreaAge = (year) => new Date().getFullYear() - year + 1;
 
-  if(value.length !== 4) return validationMessage.BIRTH.YEAR;
+  // if(value.length !== 4) return validationMessage.BIRTH.YEAR;
+  if(!isValid(userYear, regExp.birth.year)) return validationMessage.BIRTH.YEAR;
   if(koreaAge(userYear) < minAge) return validationMessage.BIRTH.AGE;
 
   return '';
@@ -97,7 +144,8 @@ const checkYear = (value) => {
 const checkDay = (year, month, day) => {
   const lastDay = (year, month) => new Date(year, month, 0).getDate();
 
-  if(lastDay(year, month) < day || !day.length) return validationMessage.BIRTH.DAY;
+  // if(lastDay(year, month) < day || !day.length) return validationMessage.BIRTH.DAY;
+  if(lastDay(year, month) < day || !isValid(Number(day), regExp.birth.day)) return validationMessage.BIRTH.DAY;
   return '';
 }
 
@@ -140,17 +188,4 @@ const tag = (e) => {
   e.target.value = '';
 }
 
-
-//중복체크
-const requestDuplicateConfirmation = (url, data) => {
-  return fetch(url, {
-      method: 'GET',
-      // body: data
-    }).then((res) => {
-      if (res.status === 200 || res.status === 201) {
-        res.json().then(json => console.log(json));
-      } else {
-        console.error(res.statusText);
-      }
-    }).catch(err => console.error(err));
-}
+const checkScroll = (target) => target.scrollHeight - target.scrollTop === target.clientHeight ? true : false;

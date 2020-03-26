@@ -4,13 +4,21 @@ const password = {
   UPPERCASE : /^(?=.*[A-Z])/,
   NUMBER: /^(?=.*[0-9])/,
   SPECIALCHARACTERS: /^(?=.*[!@#$%^*+=-])/
-}
+};
+
+const birth = {
+  year: /^(\d{4})$/,
+  // year: /^(?=.*[0-9]){4}/,
+  day: /^(\d{1,2})$/
+};
+
 const email = /^[a-z0-9_+.-]+@([a-z0-9-]+\.)+[a-z0-9]{2,4}$/;
 const phone = /^010[0-9]{7,8}$/;
 
 const regExp = {
   id,
   password,
+  birth,
   email,
   phone
 }
