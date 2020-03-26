@@ -21,7 +21,7 @@ public class UserController {
         return "index";
     }
 
-    @GetMapping("login")
+    @GetMapping("/login")
     public String viewLogin() {
         return "login";
     }
@@ -32,17 +32,9 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public String create(Model model, User user, String userId) {
+    public String create(Model model, User user, String userId, String email, String phone) {
         model.addAttribute("user", user);
         userRepository.save(user);
-        model.addAttribute("isValidUserId", isValidUserId(userId));
         return "redirect:/";
-    }
-
-    public boolean isValidUserId(String userId) {
-        if (userRepository.findByUserId(userId) == null) {
-            return false;
-        }
-        return true;
     }
 }
