@@ -88,6 +88,20 @@ public class User {
         this.createdDate = createdDate;
     }
 
+    public boolean isRegisteredUserId(String userId) {
+        if (userId == null) {
+            return false;
+        }
+        return userId.equals(this.userId);
+    }
+
+    public boolean isPasswordEquals(String password) {
+        if (password == null) {
+            return false;
+        }
+        return password.equals(this.password);
+    }
+
     @Override
     public String toString() {
         return "User{" +

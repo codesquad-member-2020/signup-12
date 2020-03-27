@@ -12,12 +12,6 @@ public class ApiUserController {
     @Autowired
     UserRepository userRepository;
 
-    @GetMapping("/test")
-    public User test() {
-        Long id = 1L;
-        return userRepository.findById(id).orElseThrow(() -> new IllegalStateException("NO DATA"));
-    }
-
     @PostMapping("/validate/userId")
     public boolean isValidUserId(@RequestBody String userId) {
         logger.info("userId : {}", userId);
