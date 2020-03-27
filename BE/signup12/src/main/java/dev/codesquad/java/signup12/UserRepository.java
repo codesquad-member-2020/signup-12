@@ -4,6 +4,8 @@ import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 
 public interface UserRepository extends CrudRepository<User, Long> {
   @Query("SELECT user_id FROM user WHERE user_id = :userId")
@@ -14,4 +16,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
   @Query("SELECT phone FROM user WHERE phone = :phone")
   String findByPhone(@Param("phone") String phone);
+
+  @Query("SELECT * FROM user WHERE user_id = :userId")
+  Optional<User> findUserByUserId(@Param("userId") String userId);
 }

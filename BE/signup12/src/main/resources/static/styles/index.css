@@ -50,6 +50,10 @@ h1 span:nth-child(8) {
   color: blue;
 }
 
+h1 span:nth-child(9) {
+  color: green;
+}
+
 .wrap .input-box {
   margin-top: 50px;
   width: 50%;
