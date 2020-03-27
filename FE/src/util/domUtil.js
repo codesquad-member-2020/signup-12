@@ -15,9 +15,9 @@ export function classRemove(target, className) {
 }
 
 export function show(target) {
-  target.style.display = 'block';
+  target.style.visibility = 'visible';
 }
 
 export function hide(target) {
-  target.style.display = 'none';
+  target.style.visibility = 'hidden';
 }

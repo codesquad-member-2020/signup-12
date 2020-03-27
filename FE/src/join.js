@@ -76,7 +76,6 @@ getElement('.interest-tag').addEventListener('keydown', (e) => {
 
 getElement('.terms-content').addEventListener('scroll', (e) => {
   const isScroll = checkScroll(e.currentTarget);
-  console.log(`scrollTop: ${e.target.scrollTop}`, `scrollHeight: ${e.target.scrollHeight}`)
   if(isScroll) classAdd(getElement('.terms'), 'checked');
 })
 
@@ -109,7 +108,7 @@ const checkID = (inputId) => {
 
 const requestId = async (inputId) => {
   const reqData = {userId: inputId};
-  return await fetch('https://41c0715c-5aa1-4130-a5f0-36d018803af4.mock.pstmn.io/users/create', {
+  return await fetch('/validate/userId', {
     method: 'POST',
     body: reqData
   }).then(response => {
@@ -269,11 +268,12 @@ const refreshTag = () => {
   getElements('.tag').forEach(el => el.remove());
 }
 
-const checkScroll = (target) => target.scrollHeight - target.scrollTop === target.clientHeight ? true : false;
+const checkScroll = (target) => target.scrollHeight - target.scrollTop <= (target.clientHeight+1) ? true : false;
 
 const resetForm = () => {
   getElements('.err-box').forEach((ele) => ele.innerText = '');
+  refreshTag();
   getElement('.terms-checkbox').removeAttribute('checked');
   getElement('.terms').classList.remove('checked');
-  // getElement('.').scrollTop = 0;
+  getElement('.terms-content').scrollTop = 0;
 }
