@@ -102,13 +102,13 @@ const checkID = (inputId) => {
 
   //fetch 중복체크
   requestId(inputId).then((data) => {
-    if(!data.validUserId) return errMSG('.id', ...(validationMessage.ID.INUSE));
+    if(!data.validation) return errMSG('.id', ...(validationMessage.ID.INUSE));
     return errMSG('.id', ...(validationMessage.ID.AVAILABLE));
   })
 }
 
 const requestId = async (inputId) => {
-  const reqData = {userId: inputId};
+  const reqData = inputId;
   return await fetch('/validate/userId', {
     method: 'POST',
     body: reqData
