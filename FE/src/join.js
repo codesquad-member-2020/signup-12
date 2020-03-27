@@ -1,6 +1,7 @@
 import {regExp, isValid} from './util/validation.js';
 import {validationMessage} from './constants/constant.js';
 import {getElement, getElements, classAdd, classRemove, show, hide} from './util/domUtil.js';
+import regenerator from "regenerator-runtime";
 
 const formWrap = getElement('.form-wrap form');
 const tagList = [];
@@ -176,7 +177,6 @@ const checkMonth = (value) => {
 const checkDay = (year, month, day) => {
   const lastDay = (year, month) => new Date(year, month, 0).getDate();
 
-  // if(lastDay(year, month) < day || !day.length) return validationMessage.BIRTH.DAY;
   if(isNaN(month) || lastDay(year, month) < day || !isValid(Number(day), regExp.birth.day)) return validationMessage.BIRTH.DAY;
   return validationMessage.BIRTH.AVAILABLE;
 }
@@ -215,7 +215,7 @@ const checkPhoneHandle = (e) => {
 
   requestPhone(e.target.value).then((data) => {
     if(data.validation) return errMSG(parentEle, ...(validationMessage.PHONE.AVAILABLE));
-    return errMSG(parentEle, ...(validationMessage.ID.INUSE));
+    return errMSG(parentEle, ...(validationMessage.PHONE.INUSE));
   })
 }
 
