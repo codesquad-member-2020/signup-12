@@ -14,6 +14,7 @@ public class User {
     String gender;
     String email;
     String phone;
+    String interest;
     LocalDate createdDate;
 
     public Long getId() {
@@ -46,6 +47,10 @@ public class User {
 
     public String getPhone() {
         return phone;
+    }
+
+    public String getInterest() {
+        return interest;
     }
 
     public LocalDate getCreatedDate() {
@@ -84,6 +89,10 @@ public class User {
         this.phone = phone;
     }
 
+    public void setInterest(String interest) {
+        this.interest = interest;
+    }
+
     public void setCreatedDate(LocalDate createdDate) {
         this.createdDate = createdDate;
     }
@@ -113,6 +122,7 @@ public class User {
                 ", gender='" + gender + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
+                ", interest='" + interest + '\'' +
                 ", createdDate=" + createdDate +
                 '}';
     }

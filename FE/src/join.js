@@ -1,6 +1,7 @@
 import {regExp, isValid} from './util/validation.js';
 import {validationMessage} from './constants/constant.js';
 import {getElement, getElements, classAdd, classRemove, show, hide} from './util/domUtil.js';
+import regenerator from "regenerator-runtime";
 
 const formWrap = getElement('.form-wrap form');
 const tagList = [];
@@ -101,13 +102,13 @@ const checkID = (inputId) => {
 
   //fetch 중복체크
   requestId(inputId).then((data) => {
-    if(!data.validUserId) return errMSG('.id', ...(validationMessage.ID.INUSE));
-    return errMSG('.id', ...(validationMessage.ID.AVAILABLE));
+    if(data.validation) return errMSG('.id', ...(validationMessage.ID.AVAILABLE));
+    return errMSG('.id', ...(validationMessage.ID.INUSE));
   })
 }
 
 const requestId = async (inputId) => {
-  const reqData = {userId: inputId};
+  const reqData = inputId;
   return await fetch('/validate/userId', {
     method: 'POST',
     body: reqData
@@ -176,7 +177,6 @@ const checkMonth = (value) => {
 const checkDay = (year, month, day) => {
   const lastDay = (year, month) => new Date(year, month, 0).getDate();
 
-  // if(lastDay(year, month) < day || !day.length) return validationMessage.BIRTH.DAY;
   if(isNaN(month) || lastDay(year, month) < day || !isValid(Number(day), regExp.birth.day)) return validationMessage.BIRTH.DAY;
   return validationMessage.BIRTH.AVAILABLE;
 }
@@ -190,21 +190,43 @@ const checkGenderHandle = (e) => {
 const checkEmailHandle = (e) => {
   if(e.target.className !== 'user-email') return;
   const parentEle = '.email';
-  if(isValid(e.target.value, regExp.email)) return errMSG(parentEle, ...(validationMessage.EMAIL.AVAILABLE));
-  else return errMSG(parentEle, ...(validationMessage.EMAIL.ERROR));
+  if(!isValid(e.target.value, regExp.email)) return errMSG(parentEle, ...(validationMessage.EMAIL.ERROR));
 
-  //중복확인
-  //사용중? validationMessage.EMAIL.INUSE;
+  requestEmail(e.target.value).then((data) => {
+    if(data.validation) return errMSG(parentEle, ...(validationMessage.EMAIL.AVAILABLE));
+    return errMSG(parentEle, ...(validationMessage.EMAIL.INUSE));
+  })
+}
+
+const requestEmail = async (inputEmail) => {
+  const reqData = inputEmail;
+  return await fetch('/validate/email', {
+    method: 'POST',
+    body: reqData
+  }).then(response => {
+    return response.json();
+  });
 }
 
 const checkPhoneHandle = (e) => {
   if(e.target.className !== 'user-phone') return;
   const parentEle = '.phone';
-  if(isValid(e.target.value, regExp.phone)) return errMSG(parentEle, ...(validationMessage.PHONE.AVAILABLE));
-  else return errMSG(parentEle, ...(validationMessage.PHONE.ERROR));
+  if(!isValid(e.target.value, regExp.phone)) return errMSG(parentEle, ...(validationMessage.PHONE.ERROR));
 
-  //중복확인
-  //사용중? validationMessage.PHONE.INUSE;
+  requestPhone(e.target.value).then((data) => {
+    if(data.validation) return errMSG(parentEle, ...(validationMessage.PHONE.AVAILABLE));
+    return errMSG(parentEle, ...(validationMessage.PHONE.INUSE));
+  })
+}
+
+const requestPhone = async (inputPhone) => {
+  const reqData = inputPhone;
+  return await fetch('/validate/phone', {
+    method: 'POST',
+    body: reqData
+  }).then(response => {
+    return response.json();
+  });
 }
 
 const checkInterestHandle = (e) => {
@@ -239,7 +261,7 @@ const updateTag = () => {
   const parentEle = getElement('.interest-input');
   refreshTag();
 
-  tagList.reverse().forEach((tag) => {  
+  tagList.reverse().forEach((tag) => {
     parentEle.prepend(makeTag(tag));
   })
   tagList.reverse();

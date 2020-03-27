@@ -13,27 +13,26 @@ public class ApiUserController {
     UserRepository userRepository;
 
     @PostMapping("/validate/userId")
-    public boolean isValidUserId(@RequestBody String userId) {
-        logger.info("userId : {}", userId);
+    public ValidationResult isValidUserId(@RequestBody String userId) {
         if (userRepository.findByUserId(userId) == null) {
-            return true;
+            return ValidationResult.ok();
         }
-        return false;
+        return ValidationResult.failure();
     }
 
     @PostMapping("/validate/email")
-    public boolean isValidEmail(@RequestBody String email) {
+    public ValidationResult isValidEmail(@RequestBody String email) {
         if (userRepository.findByEmail(email) == null) {
-            return true;
+            return ValidationResult.ok();
         }
-        return false;
+        return ValidationResult.failure();
     }
 
     @PostMapping("/validate/phone")
-    public boolean isValidPhone(@RequestBody String phone) {
+    public ValidationResult isValidPhone(@RequestBody String phone) {
         if (userRepository.findByPhone(phone) == null) {
-            return true;
+            return ValidationResult.ok();
         }
-        return false;
+        return ValidationResult.failure();
     }
 }
