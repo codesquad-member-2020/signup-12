@@ -16,20 +16,24 @@ export const validationMessage = {
     AVAILABLE: ['비밀번호가 일치합니다', true]
   },
   BIRTH: {
-    YEAR: '태어난 년도 4자리를 정확하게 입력하세요.',
-    AGE: '15세 이상만 가입 가능합니다.',
-    DAY: '태어난 날짜를 다시 확인해주세요.'
+    YEAR: ['태어난 년도 4자리를 정확하게 입력하세요.', false],
+    AGE: ['15세 이상만 가입 가능합니다.', false],
+    DAY: ['태어난 날짜를 다시 확인해주세요.', false],
+    AVAILABLE: ['', true]
   },
   EMAIL: {
-    INUSE: '이미 사용중인 이메일입니다.',
-    ERROR: '이메일 주소를 다시 확인해주세요'
+    INUSE: ['이미 사용중인 이메일입니다.', false],
+    ERROR: ['이메일 주소를 다시 확인해주세요', false],
+    AVAILABLE: ['', true]
   },
   PHONE: {
-    INUSE: '이미 사용중인 번호입니다.',
-    ERROR: '형식에 맞지 않는 번호입니다.'
+    INUSE: ['이미 사용중인 번호입니다.', false],
+    ERROR: ['형식에 맞지 않는 번호입니다.', false],
+    AVAILABLE: ['', true]
   },
   TAG : {
-    LENGTH: '3개 이상의 관심사를 입력하세요.'
+    LENGTH: ['3개 이상의 관심사를 입력하세요.', false],
+    AVAILABLE: ['', true]
   }
 }
 

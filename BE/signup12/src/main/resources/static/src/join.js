@@ -3,6 +3,7 @@ import {validationMessage} from './constants/constant.js';
 import {getElement, getElements, classAdd, classRemove, show, hide} from './util/domUtil.js';
 
 const formWrap = getElement('.form-wrap form');
+const tagList = [];
 
 formWrap.addEventListener('focusin', (e) => {
   if(e.target.className === 'interest-tag') return classAdd(e.target.closest('.interest-input'), 'focus');
@@ -15,9 +16,12 @@ formWrap.addEventListener('focusout', (e) => {
   checkIDHandle(e);
   checkPWHandle(e);
   doubleCheckPWHandle(e);
+  checkNameHandle(e);
   checkBirthHandle(e);
+  checkGenderHandle(e);
   checkEmailHandle(e);
   checkPhoneHandle(e);
+  checkInterestHandle(e);
 });
 
 formWrap.addEventListener('click', (e) => {
@@ -46,7 +50,10 @@ formWrap.addEventListener('click', (e) => {
     const formDivChildArray = Array.prototype.slice.call(formDivChild);
     const isEveryCheck = formDivChildArray.every((ele) => ele.classList.contains('checked'));
 
-    if(isEveryCheck) formWrap.submit();
+    if(isEveryCheck) {
+      getElement('.interest-tag').value = tagList.join(',');
+      formWrap.submit();
+    }
   }
 
   if(targetClassList.contains('reset-btn')) {
@@ -59,8 +66,13 @@ formWrap.addEventListener('click', (e) => {
 
 getElement('.interest-tag').addEventListener('keyup', (e) => {
   if(e.keyCode !== 188) return;
-  tag(e);
-});
+  addTag(e);
+
+})
+
+getElement('.interest-tag').addEventListener('keydown', (e) => {
+  if((e.keyCode === 8) && (e.target.value === '') && (tagList.length > 0)) removeTag(e);
+})
 
 getElement('.terms-content').addEventListener('scroll', (e) => {
   const isScroll = checkScroll(e.currentTarget);
@@ -90,8 +102,7 @@ const checkID = (inputId) => {
 
   //fetch 중복체크
   requestId(inputId).then((data) => {
-  console.log(data);
-    if(data) return errMSG('.id', ...(validationMessage.ID.INUSE));
+    if(!data.validUserId) return errMSG('.id', ...(validationMessage.ID.INUSE));
     return errMSG('.id', ...(validationMessage.ID.AVAILABLE));
   })
 }
@@ -130,9 +141,16 @@ const doubleCheckPW = (pwEleValue, target) => {
   else return errMSG('.password-check', ...(validationMessage.PWCHECK.UNAVAILABLE));
 }
 
+const checkNameHandle = (e) => {
+  if(!e.target.classList.contains('user-name')) return;
+  if(e.target.value) return classAdd(e.target.closest('.name'), 'checked');
+  return classRemove(e.target.closest('.name'), 'checked');
+}
+
 const checkBirthHandle = (e) => {
   const parentEle = '.birthday';
   if(e.target.className === 'birth-year') errMSG(parentEle, ...checkYear(e.target.value));
+  if(e.target.className === 'birth-month') errMSG(parentEle, ...checkMonth(e.target.value));
   if(e.target.className === 'birth-day') {
     const year = e.target.closest(parentEle).querySelector('.birth-year');
     const month = e.target.closest(parentEle).querySelector('.birth-month');
@@ -151,12 +169,23 @@ const checkYear = (value) => {
   return validationMessage.BIRTH.AVAILABLE;
 }
 
+const checkMonth = (value) => {
+  if(isNaN(value)) return validationMessage.BIRTH.DAY;
+  return validationMessage.BIRTH.AVAILABLE;
+}
+
 const checkDay = (year, month, day) => {
   const lastDay = (year, month) => new Date(year, month, 0).getDate();
 
   // if(lastDay(year, month) < day || !day.length) return validationMessage.BIRTH.DAY;
-  if(lastDay(year, month) < day || !isValid(Number(day), regExp.birth.day)) return validationMessage.BIRTH.DAY;
+  if(isNaN(month) || lastDay(year, month) < day || !isValid(Number(day), regExp.birth.day)) return validationMessage.BIRTH.DAY;
   return validationMessage.BIRTH.AVAILABLE;
+}
+
+const checkGenderHandle = (e) => {
+  if(!e.target.classList.contains('user-gender')) return;
+  if(e.target.selectedIndex) return classAdd(e.target.closest('.gender'), 'checked');
+  return classRemove(e.target.closest('.gender'), 'checked');
 }
 
 const checkEmailHandle = (e) => {
@@ -179,23 +208,65 @@ const checkPhoneHandle = (e) => {
   //사용중? validationMessage.PHONE.INUSE;
 }
 
-const tag = (e) => {
-  const parentEle = getElement('.interest-input');
+const checkInterestHandle = (e) => {
+  if(e.target.className !== 'interest-tag') return;
+  const parentEle = '.interest';
+  if(tagList.length >= 3) return errMSG(parentEle, ...(validationMessage.TAG.AVAILABLE));
+  return errMSG(parentEle, ...(validationMessage.TAG.LENGTH));
+}
 
+const addTag = (e) => {
+  if(e.target.value === ',') {
+    e.target.value = '';
+    return;
+  }
+  tagList.push(e.target.value.replace(',',''));
+  e.target.value = '';
+  return updateTag();
+}
+
+const removeTag = (e) => {
+  e.target.value = tagList.pop() + ' ';
+  updateTag();
+}
+
+const removeTagOnClickEvent = (e) => {
+  const removeTargetTag = e.target.previousElementSibling.innerText;
+  tagList.splice(tagList.indexOf(removeTargetTag), 1);
+  updateTag();
+}
+
+const updateTag = () => {
+  const parentEle = getElement('.interest-input');
+  refreshTag();
+
+  tagList.reverse().forEach((tag) => {  
+    parentEle.prepend(makeTag(tag));
+  })
+  tagList.reverse();
+}
+
+const makeTag = (tag) => {
   const divEle = document.createElement('div');
   classAdd(divEle, 'tag')
   const spanEle = document.createElement('span');
   classAdd(spanEle, 'tag-text');
   const buttonEle = document.createElement('button');
+  buttonEle.type = 'button';
   classAdd(buttonEle, 'tag-close');
+  buttonEle.addEventListener('click', (e) => {
+    removeTagOnClickEvent(e);
+  })
 
-  spanEle.innerText = e.target.value;
+  spanEle.innerText = tag;
+
   divEle.appendChild(spanEle);
   divEle.appendChild(buttonEle);
+  return divEle;
+}
 
-  parentEle.prepend(divEle);
-
-  e.target.value = '';
+const refreshTag = () => {
+  getElements('.tag').forEach(el => el.remove());
 }
 
 const checkScroll = (target) => target.scrollHeight - target.scrollTop === target.clientHeight ? true : false;
@@ -206,4 +277,3 @@ const resetForm = () => {
   getElement('.terms').classList.remove('checked');
   // getElement('.').scrollTop = 0;
 }
-
