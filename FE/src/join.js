@@ -3,6 +3,7 @@ import {validationMessage} from './constants/constant.js';
 import {getElement, getElements, classAdd, classRemove, show, hide} from './util/domUtil.js';
 
 const formWrap = getElement('.form-wrap form');
+const tagList = [];
 
 formWrap.addEventListener('focusin', (e) => {
   if(e.target.className === 'interest-tag') return classAdd(e.target.closest('.interest-input'), 'focus');
@@ -59,8 +60,12 @@ formWrap.addEventListener('click', (e) => {
 
 getElement('.interest-tag').addEventListener('keyup', (e) => {
   if(e.keyCode !== 188) return;
-  tag(e);
-});
+  addTag(e);
+})
+
+getElement('.interest-tag').addEventListener('keydown', (e) => {
+  if((e.keyCode === 8) && (e.target.value === '') && (tagList.length > 0)) removeTag(e);
+})
 
 getElement('.terms-content').addEventListener('scroll', (e) => {
   const isScroll = checkScroll(e.currentTarget);
@@ -178,23 +183,58 @@ const checkPhoneHandle = (e) => {
   //사용중? validationMessage.PHONE.INUSE;
 }
 
-const tag = (e) => {
-  const parentEle = getElement('.interest-input');
+const addTag = (e) => {
+  if(e.target.value === ',') {
+    e.target.value = '';
+    return;
+  }
+  tagList.push(e.target.value.replace(',',''));
+  e.target.value = '';
+  return updateTag();
+}
 
+const removeTag = (e) => {
+  e.target.value = tagList.pop() + ' ';
+  updateTag();
+}
+
+const removeTagOnClickEvent = (e) => {
+  const removeTargetTag = e.target.previousElementSibling.innerText;
+  tagList.splice(tagList.indexOf(removeTargetTag), 1);
+  updateTag();
+}
+
+const updateTag = () => {
+  const parentEle = getElement('.interest-input');
+  refreshTag();
+
+  tagList.reverse().forEach((tag) => {  
+    parentEle.prepend(makeTag(tag));
+  })
+  tagList.reverse();
+}
+
+const makeTag = (tag) => {
   const divEle = document.createElement('div');
   classAdd(divEle, 'tag')
   const spanEle = document.createElement('span');
   classAdd(spanEle, 'tag-text');
   const buttonEle = document.createElement('button');
+  buttonEle.type = 'button';
   classAdd(buttonEle, 'tag-close');
+  buttonEle.addEventListener('click', (e) => {
+    removeTagOnClickEvent(e);
+  })
 
-  spanEle.innerText = e.target.value;
+  spanEle.innerText = tag;
+
   divEle.appendChild(spanEle);
   divEle.appendChild(buttonEle);
+  return divEle;
+}
 
-  parentEle.prepend(divEle);
-
-  e.target.value = '';
+const refreshTag = () => {
+  getElements('.tag').forEach(el => el.remove());
 }
 
 const checkScroll = (target) => target.scrollHeight - target.scrollTop === target.clientHeight ? true : false;
