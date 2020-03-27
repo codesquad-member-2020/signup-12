@@ -66,7 +66,7 @@ public class UserController {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    private String catchWrongPasswordException(NotFoundUserException e, Model model) {
+    private String catchWrongPasswordException(WrongPasswordException e, Model model) {
         model.addAttribute("errorMessage", e.getMessage());
         return "/login";
     }
