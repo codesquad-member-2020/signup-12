@@ -1,0 +1,237 @@
+@import 'reset.css';
+
+body {
+  background-color: #eee;
+}
+
+.wrap {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.wrap h1 {
+  color: #04a600;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.wrap .form-wrap {
+  width: 400px;
+  margin-top: 30px;
+}
+
+.form-wrap > form > div {
+  margin-bottom: 10px;
+}
+
+.form-wrap label {
+  font-size: 13px;
+  font-weight: bold;
+  color: #000;
+}
+
+.form-wrap .err-box {
+  display: block;
+  height: 10px;
+  line-height: 10px;
+  font-size: 11px;
+  color: red;
+}
+
+.form-wrap .focus {
+  border-color: #04a600;
+}
+
+.form-wrap .err-box.check {
+  color: blue;
+}
+
+.form-wrap input, .form-wrap select {
+  width: 100%;
+  display: block;
+  margin: 5px 0;
+  height: 40px;
+  padding: 5px 10px;
+  border: 1px solid #ddd
+}
+
+.form-wrap .birth-input-box {
+  display: flex;
+  justify-content: space-between;
+}
+
+.birth-input-box input {
+  width: 32%;
+}
+
+.form-wrap select {
+  width: 32%;
+  border-radius: 0;
+  -webkit-appearance: none;  /* 네이티브 외형 감추기 */
+  -moz-appearance: none;
+  appearance: none;
+  background: #fff url('https://user-images.githubusercontent.com/58324414/77450524-47595380-6deb-11ea-8918-0b7037db22f6.png') no-repeat 95% 50%;
+  background-size: 25px auto;
+}
+
+.gender select {
+  width: 100%;
+}
+
+.form-wrap > form > .terms {
+  margin-bottom: 0;
+}
+
+.terms button {
+  background: none;
+  font-weight: bold;
+  text-decoration: underline;
+  border: none;
+  padding: 0;
+  font-size: 13px;
+}
+
+.terms input[type="checkbox"] {
+  display: inline-block;
+  vertical-align: middle;
+  width: 20px;
+  height: 20px;
+}
+
+.join-button-wrap {
+  display: flex;
+  justify-content: space-between;
+}
+
+.join-button-wrap input[type="reset"], .join-button-wrap button {
+  width: 49%;
+  margin: 0;
+  color: #fff;
+  background: #04a600;
+  height: 50px;
+  border: none;
+}
+
+.interest-input {
+  display: flex;
+  background: #fff;
+  flex-wrap: wrap;
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  margin-top: 5px;
+}
+
+.interest-input input {
+  border: none;
+  margin: 5px;
+  padding: 0;
+  min-width: 40px;
+  flex: 1;
+}
+
+.interest-input .tag {
+  display: inline-flex;
+  align-items: center;
+  line-height: 35px;
+  height: 35px;
+  background: #eee;
+  margin: 5px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 0 5px;
+}
+
+.interest-input .tag-text {
+  font-size: 14px;
+  color: #444;
+  padding-left: 5px;
+}
+
+.interest-input .tag-close {
+  border: 0;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  margin-left: 5px;
+  background: url('https://user-images.githubusercontent.com/58324414/77450548-4f18f800-6deb-11ea-92e8-81d9af41f98d.png') no-repeat;
+  background-size: 100% auto;
+}
+
+.terms-popup {
+  display: none;
+  width: 500px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #eee;
+  border: 1px solid #ddd;
+  padding: 30px 20px;
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+.terms-popup strong {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.terms-popup .terms-content {
+  margin: 20px 0 30px;
+  background: #fff;
+  padding: 15px;
+  height: 100px;
+  overflow: auto;
+  box-sizing: border-box;
+  line-height: 1.3;
+  border: 1px solid #ccc;
+  font-size: 13px;
+}
+
+.terms-popup .terms-check-btn {
+  width: 30%;
+  display: block;
+  margin: 0 auto;
+  color: #fff;
+  background: #aaa;
+  height: 40px;
+  border: none;
+  text-decoration: none;
+}
+
+.terms.checked .terms-check-btn {
+  background: #04a600;
+}
+
+.terms-popup .terms-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  background: url('https://user-images.githubusercontent.com/58324414/77450548-4f18f800-6deb-11ea-92e8-81d9af41f98d.png') no-repeat;
+  background-size: 100% auto;
+}
+
+.dim {
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.3);
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.blind {
+  text-indent: -99999px;
+  font-size: 0;
+  line-height: 0;
+}

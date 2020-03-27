@@ -1,0 +1,20 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../styles/login.css">
+  <title>login</title>
+</head>
+<body>
+  <div class="wrap">
+    {{errorMessage}}
+    <div class="login-wrap">
+      <form action="/login" method="POST">
+        <input type="text" placeholder="아이디" name="userId">
+        <input type="password" placeholder="비밀번호" name="password">
+        <button type="sumit">로그인</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
