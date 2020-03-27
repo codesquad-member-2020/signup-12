@@ -76,7 +76,6 @@ getElement('.interest-tag').addEventListener('keydown', (e) => {
 
 getElement('.terms-content').addEventListener('scroll', (e) => {
   const isScroll = checkScroll(e.currentTarget);
-  console.log(`scrollTop: ${e.target.scrollTop}`, `scrollHeight: ${e.target.scrollHeight}`)
   if(isScroll) classAdd(getElement('.terms'), 'checked');
 })
 
@@ -102,8 +101,8 @@ const checkID = (inputId) => {
 
   //fetch 중복체크
   requestId(inputId).then((data) => {
-    if(!data.validation) return errMSG('.id', ...(validationMessage.ID.INUSE));
-    return errMSG('.id', ...(validationMessage.ID.AVAILABLE));
+    if(data.validation) return errMSG('.id', ...(validationMessage.ID.AVAILABLE));
+    return errMSG('.id', ...(validationMessage.ID.INUSE));
   })
 }
 
@@ -191,21 +190,43 @@ const checkGenderHandle = (e) => {
 const checkEmailHandle = (e) => {
   if(e.target.className !== 'user-email') return;
   const parentEle = '.email';
-  if(isValid(e.target.value, regExp.email)) return errMSG(parentEle, ...(validationMessage.EMAIL.AVAILABLE));
-  else return errMSG(parentEle, ...(validationMessage.EMAIL.ERROR));
+  if(!isValid(e.target.value, regExp.email)) return errMSG(parentEle, ...(validationMessage.EMAIL.ERROR));
 
-  //중복확인
-  //사용중? validationMessage.EMAIL.INUSE;
+  requestEmail(e.target.value).then((data) => {
+    if(data.validation) return errMSG(parentEle, ...(validationMessage.EMAIL.AVAILABLE));
+    return errMSG(parentEle, ...(validationMessage.EMAIL.INUSE));
+  })
+}
+
+const requestEmail = async (inputEmail) => {
+  const reqData = inputEmail;
+  return await fetch('/validate/email', {
+    method: 'POST',
+    body: reqData
+  }).then(response => {
+    return response.json();
+  });
 }
 
 const checkPhoneHandle = (e) => {
   if(e.target.className !== 'user-phone') return;
   const parentEle = '.phone';
-  if(isValid(e.target.value, regExp.phone)) return errMSG(parentEle, ...(validationMessage.PHONE.AVAILABLE));
-  else return errMSG(parentEle, ...(validationMessage.PHONE.ERROR));
+  if(!isValid(e.target.value, regExp.phone)) return errMSG(parentEle, ...(validationMessage.PHONE.ERROR));
 
-  //중복확인
-  //사용중? validationMessage.PHONE.INUSE;
+  requestPhone(e.target.value).then((data) => {
+    if(data.validation) return errMSG(parentEle, ...(validationMessage.PHONE.AVAILABLE));
+    return errMSG(parentEle, ...(validationMessage.PHONE.INUSE));
+  })
+}
+
+const requestPhone = async (inputPhone) => {
+  const reqData = inputPhone;
+  return await fetch('/validate/phone', {
+    method: 'POST',
+    body: reqData
+  }).then(response => {
+    return response.json();
+  });
 }
 
 const checkInterestHandle = (e) => {
@@ -240,7 +261,7 @@ const updateTag = () => {
   const parentEle = getElement('.interest-input');
   refreshTag();
 
-  tagList.reverse().forEach((tag) => {  
+  tagList.reverse().forEach((tag) => {
     parentEle.prepend(makeTag(tag));
   })
   tagList.reverse();
@@ -269,11 +290,12 @@ const refreshTag = () => {
   getElements('.tag').forEach(el => el.remove());
 }
 
-const checkScroll = (target) => target.scrollHeight - target.scrollTop === target.clientHeight ? true : false;
+const checkScroll = (target) => target.scrollHeight - target.scrollTop <= (target.clientHeight+1) ? true : false;
 
 const resetForm = () => {
   getElements('.err-box').forEach((ele) => ele.innerText = '');
+  refreshTag();
   getElement('.terms-checkbox').removeAttribute('checked');
   getElement('.terms').classList.remove('checked');
-  // getElement('.').scrollTop = 0;
+  getElement('.terms-content').scrollTop = 0;
 }

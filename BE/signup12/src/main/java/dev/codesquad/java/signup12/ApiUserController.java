@@ -31,7 +31,7 @@ public class ApiUserController {
     @PostMapping("/validate/phone")
     public ValidationResult isValidPhone(@RequestBody String phone) {
         if (userRepository.findByPhone(phone) == null) {
-            return ValidationResult.failure();
+            return ValidationResult.ok();
         }
         return ValidationResult.failure();
     }
