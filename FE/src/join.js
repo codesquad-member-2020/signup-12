@@ -16,9 +16,12 @@ formWrap.addEventListener('focusout', (e) => {
   checkIDHandle(e);
   checkPWHandle(e);
   doubleCheckPWHandle(e);
+  checkNameHandle(e);
   checkBirthHandle(e);
+  checkGenderHandle(e);
   checkEmailHandle(e);
   checkPhoneHandle(e);
+  checkInterestHandle(e);
 });
 
 formWrap.addEventListener('click', (e) => {
@@ -47,7 +50,10 @@ formWrap.addEventListener('click', (e) => {
     const formDivChildArray = Array.prototype.slice.call(formDivChild);
     const isEveryCheck = formDivChildArray.every((ele) => ele.classList.contains('checked'));
 
-    if(isEveryCheck) formWrap.submit();
+    if(isEveryCheck) {
+      getElement('.interest-tag').value = tagList.join(',');
+      formWrap.submit();
+    }
   }
 
   if(targetClassList.contains('reset-btn')) {
@@ -61,6 +67,7 @@ formWrap.addEventListener('click', (e) => {
 getElement('.interest-tag').addEventListener('keyup', (e) => {
   if(e.keyCode !== 188) return;
   addTag(e);
+
 })
 
 getElement('.interest-tag').addEventListener('keydown', (e) => {
@@ -95,7 +102,7 @@ const checkID = (inputId) => {
 
   //fetch 중복체크
   requestId(inputId).then((data) => {
-    if(data.validUserId) return errMSG('.id', ...(validationMessage.ID.INUSE));
+    if(!data.validUserId) return errMSG('.id', ...(validationMessage.ID.INUSE));
     return errMSG('.id', ...(validationMessage.ID.AVAILABLE));
   })
 }
@@ -134,9 +141,16 @@ const doubleCheckPW = (pwEleValue, target) => {
   else return errMSG('.password-check', ...(validationMessage.PWCHECK.UNAVAILABLE));
 }
 
+const checkNameHandle = (e) => {
+  if(!e.target.classList.contains('user-name')) return;
+  if(e.target.value) return classAdd(e.target.closest('.name'), 'checked');
+  return classRemove(e.target.closest('.name'), 'checked');
+}
+
 const checkBirthHandle = (e) => {
   const parentEle = '.birthday';
   if(e.target.className === 'birth-year') errMSG(parentEle, ...checkYear(e.target.value));
+  if(e.target.className === 'birth-month') errMSG(parentEle, ...checkMonth(e.target.value));
   if(e.target.className === 'birth-day') {
     const year = e.target.closest(parentEle).querySelector('.birth-year');
     const month = e.target.closest(parentEle).querySelector('.birth-month');
@@ -155,12 +169,23 @@ const checkYear = (value) => {
   return validationMessage.BIRTH.AVAILABLE;
 }
 
+const checkMonth = (value) => {
+  if(isNaN(value)) return validationMessage.BIRTH.DAY;
+  return validationMessage.BIRTH.AVAILABLE;
+}
+
 const checkDay = (year, month, day) => {
   const lastDay = (year, month) => new Date(year, month, 0).getDate();
 
   // if(lastDay(year, month) < day || !day.length) return validationMessage.BIRTH.DAY;
-  if(lastDay(year, month) < day || !isValid(Number(day), regExp.birth.day)) return validationMessage.BIRTH.DAY;
+  if(isNaN(month) || lastDay(year, month) < day || !isValid(Number(day), regExp.birth.day)) return validationMessage.BIRTH.DAY;
   return validationMessage.BIRTH.AVAILABLE;
+}
+
+const checkGenderHandle = (e) => {
+  if(!e.target.classList.contains('user-gender')) return;
+  if(e.target.selectedIndex) return classAdd(e.target.closest('.gender'), 'checked');
+  return classRemove(e.target.closest('.gender'), 'checked');
 }
 
 const checkEmailHandle = (e) => {
@@ -181,6 +206,13 @@ const checkPhoneHandle = (e) => {
 
   //중복확인
   //사용중? validationMessage.PHONE.INUSE;
+}
+
+const checkInterestHandle = (e) => {
+  if(e.target.className !== 'interest-tag') return;
+  const parentEle = '.interest';
+  if(tagList.length >= 3) return errMSG(parentEle, ...(validationMessage.TAG.AVAILABLE));
+  return errMSG(parentEle, ...(validationMessage.TAG.LENGTH));
 }
 
 const addTag = (e) => {
