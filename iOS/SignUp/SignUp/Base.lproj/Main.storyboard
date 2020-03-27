@@ -84,6 +84,9 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" id="JYJ-M9-6gj"/>
+                    <connections>
+                        <segue destination="yVI-0n-9XA" kind="show" identifier="goToPersonalInfoViewController" id="McN-sj-eJr"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
@@ -124,11 +127,12 @@
             <objects>
                 <viewController id="yVI-0n-9XA" customClass="PersonalInfoViewController" customModule="SignUp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="MDX-LT-FYj">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="tG5-Db-mHR"/>
                     </view>
+                    <navigationItem key="navigationItem" id="PRM-Kb-3Dk"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z2b-bG-dy5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
